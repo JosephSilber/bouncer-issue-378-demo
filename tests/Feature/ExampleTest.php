@@ -2,19 +2,31 @@
 
 namespace Tests\Feature;
 
+use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ExampleTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testBasicTest()
+    public function setUp()
     {
-        $response = $this->get('/');
+        parent::setUp();
+
+        $this->admin = User::findOrFail(1);
+    }
+
+    public function testOne()
+    {
+        $response = $this->actingAs($this->admin)
+            ->json('GET', '/users');
+
+        $response->assertStatus(200);
+    }
+
+    public function testTwo()
+    {
+        $response = $this->actingAs($this->admin)
+            ->json('GET', '/users');
 
         $response->assertStatus(200);
     }
