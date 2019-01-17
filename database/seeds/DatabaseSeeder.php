@@ -12,6 +12,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class)->create()->allow('view', User::class);
+        // Bouncer::ability()->create([
+        //     'name' => 'read-users'
+        // ]);
+        Bouncer::allow('superadmin')->everything();
+
+        $user = User::create([
+            'name' => 'Bouncer Test',
+            'email' => 'test@example.org',
+            'password' => 'supersecretpwd'
+        ]);
+
+        // Bouncer::allow($user)->to('read-users');
+        Bouncer::assign('superadmin')->to($user);
     }
 }

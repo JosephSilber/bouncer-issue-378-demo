@@ -11,4 +11,12 @@
 |
 */
 
-Route::get('users', 'UsersController@index');
+Route::middleware(['auth'])->group(function () {
+    Route::group([
+        'middleware' => ['can:read-users'],
+        'prefix' => 'users',
+        'as' => 'users.'
+    ], function () {
+        Route::get('/', ['as' => 'index', 'uses' => 'UsersController@index']);
+    });
+});
